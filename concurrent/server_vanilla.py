@@ -1,5 +1,5 @@
 from socket import *
-
+from fib import fib
 
 def server(address):
     sock = socket(AF_INET, SOCK_STREAM)
@@ -22,11 +22,5 @@ def fib_handler(client):
         resp = str(result).encode("ascii") + b'\n'
         client.send(resp)
     print('Client disconnected')
-
-def fib(n):
-    if n <= 2:
-        return 1
-    else:
-        return fib(n - 1) + fib(n - 2)
 
 server(("", 25565))
