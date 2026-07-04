@@ -8,19 +8,19 @@ def server(address):
     sock.listen(5)
 
     while True:
-        client, addr = sock.accept() # block
+        client, addr = sock.accept() # block，等待建立tcp连接
         print('Client connected from', addr)
         fib_handler(client)
 
 def fib_handler(client):
     while True:
-        req = client.recv(1024)
+        req = client.recv(1024) # block，等待客户端发送消息
         if not req:
             break
         n = int(req)
         result = fib(n)
         resp = str(result).encode("ascii") + b'\n'
-        client.send(resp)
+        client.send(resp) # block
     print('Client disconnected')
 
 server(("", 25565))
