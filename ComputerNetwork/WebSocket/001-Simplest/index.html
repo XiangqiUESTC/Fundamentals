@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="">
+    <style>
+        #chatbox{
+            min-height: 600px;
+            width: 800px;
+            border: black 1px solid;
+        }
+        .middle{
+            margin-left: 50%;
+            transform: translate(-50%, 0);
+        }
+    </style>
+    <head><title></title></head>
+    <body>
+        <div id="chatbox" class="middle">
+
+        </div>
+        <div id="sendbox" class="middle">
+            <input type="text" id="input_message" placeholder="要聊点什么呢..."/>
+            <button onclick="send()">发送</button>
+        </div>
+    </body>
+    <script>
+        const ws = new WebSocket("ws://localhost:8000/chat")
+
+        ws.onmessage = (event) => {
+            console.log(event.data)
+            const box = document.getElementById("chatbox");
+            box.innerText += event.data;
+        };
+
+        function getHistory(){
+            return null
+        }
+
+        function send(){
+            const ipt = document.getElementById("input_message")
+            const msg = ipt.value
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.send(msg);
+            } else {
+                console.warn("网络错误，请稍后再试");
+            }
+        }
+    </script>
+</html>
