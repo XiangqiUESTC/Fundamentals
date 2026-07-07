@@ -1,26 +1,30 @@
 from socket import *
-from threading import Thread
 from fib import fib
+from threading import Thread
 
-def server():
+def server(address):
     sock = socket(AF_INET, SOCK_STREAM)
     sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, True)
-    sock.bind(('localhost', 25565))
-    sock.listen(5)
+    sock.bind(address)
+    sock.listen(2)
+
     while True:
-        client, addr = sock.accept()
-        print("connected from", addr)
-        thread = Thread(target=fib_handler, args=(client,), daemon=True)
+        client, addr = sock.accept() # block，等待建立tcp连接
+        print('Client connected from', addr)
+        thread = Thread(target=fib_handler, args=(client,))
+        print(f"Create Thread to handle:{thread.ident}")
         thread.start()
 
 def fib_handler(client):
     while True:
-        reqs = client.recv(1024)
-        if not reqs:
+        req = client.recv(1024) # block，等待客户端发送消息
+        if not req:
             break
-        n = int(reqs.decode())
-        resp = str(fib(n)).encode("ascii") + b"\n"
-        client.send(resp)
-    print("thread finished")
+        n = int(req)
+        result = fib(n)
+        resp = str(result).encode("ascii") + b'\n'
+        client.send(resp) # block
+    client.send(b"hhhhhhh")
+    print('Client disconnected')
 
-server()
+server(("", 25565))

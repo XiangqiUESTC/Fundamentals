@@ -5,7 +5,7 @@ def server(address):
     sock = socket(AF_INET, SOCK_STREAM)
     sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, True)
     sock.bind(address)
-    sock.listen(5)
+    sock.listen(2)
 
     while True:
         client, addr = sock.accept() # block，等待建立tcp连接
@@ -21,6 +21,7 @@ def fib_handler(client):
         result = fib(n)
         resp = str(result).encode("ascii") + b'\n'
         client.send(resp) # block
+    client.send(b"hhhhhhh")
     print('Client disconnected')
 
 server(("", 25565))
