@@ -11,7 +11,7 @@ def server(address):
     while True:
         client, addr = sock.accept() # block，等待建立tcp连接
         print('Client connected from', addr)
-        thread = Thread(target=fib_handler, args=(client,))
+        thread = Thread(target=fib_handler, args=(client,), daemon=True)
         thread.start()
         print(f"Create Thread to handle:{thread.ident}")
 
