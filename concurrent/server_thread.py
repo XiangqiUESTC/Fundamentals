@@ -24,7 +24,6 @@ def fib_handler(client):
         result = fib(n)
         resp = str(result).encode("ascii") + b'\n'
         client.send(resp) # block
-    client.send(b"hhhhhhh")
     print('Client disconnected')
 
 server(("", 25565))

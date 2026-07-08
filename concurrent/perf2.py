@@ -17,7 +17,12 @@ def monitor():
 
 thread = Thread(target=monitor, daemon=True).start()
 
-while True:
-    sock.send(b'1')
-    resp = sock.recv(1024)
-    n += 1
+try:
+    while True:
+        sock.send(b'1')
+        resp = sock.recv(1024)
+        n += 1
+except KeyboardInterrupt:
+    print("closing client")
+finally:
+    sock.close()
